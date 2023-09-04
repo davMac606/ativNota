@@ -72,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             echo "<span id='error'>A imagem deve possuir no máximo 2 MB</span>";
         } else {
             if (move_uploaded_file($imagem['tmp_name'], $uploadDir . '/' . $novoNomeImagem)) {
-                $sql = "INSERT INTO Pratos (nomePrato, precoPrato, ingredientesPrato, imagemPrato) VALUES (:nome, :preco, :ingredientes, :imagem)";
+                $sql = "INSERT INTO pratosPHP (nomePrato, precoPrato, ingredientesPrato, imagemPrato) VALUES (:nome, :preco, :ingredientes, :imagem)";
 
                 $stmt = $pdo->prepare($sql);
 
@@ -93,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
                         $uploadFile = null;
                     }
 
-                    $stmt = $pdo -> prepare("INSERT INTO Pratos (nome, preco, ingredientes, imagem) VALUES (:nome, :preco, :ingredientes, :imagem)");
+                    $stmt = $pdo -> prepare("INSERT INTO pratosPHP (nomePrato, precoPrato, ingredientesPrato, imagemPrato) VALUES (:nome, :preco, :ingredientes, :imagem)");
                     $stmt -> bindParam(':nome', $nomePrato);
                     $stmt -> bindParam(':preco', $precoPrato);
                     $stmt -> bindParam(':ingredientes', $ingredientesPrato);
