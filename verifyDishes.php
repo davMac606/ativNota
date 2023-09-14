@@ -55,12 +55,12 @@
                  echo "<td>" . $row['precoPrato'] . "</td>";
 
                  if ($row["imagemPrato"] == null) {
-                     echo "<td align='center'>-</td>";
-                 } else {
-                    echo "<td align='center'><img src=".$row['imagemPrato'] . " width='50px' height='50px'></td>";
-                 }
-                 echo "</tr>";
-             }
+                    echo "<td align='center'>-</td>";
+                } else {
+                   echo "<td align='center'><img src=".$row['imagemPrato'] . " width='50px' height='50px'></td>";
+                }
+                echo "</tr>";
+            }
 
              echo "</table><br>
              

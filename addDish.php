@@ -30,8 +30,8 @@
         <input type="text" name="ingredientesPrato" id="ingredientesPrato">
         <br><br>
 
-        <label for="imagem">Imagem:</label>
-        <input type="file" name="imagemPrato" id="imagemPrato" accept="image/*" required> *
+        <label for="foto">Imagem:</label>
+        <input type="file" name="foto" id="foto" accept="image/*" required> *
         <br><br>
 
         <input type="submit" value="Inserir">
@@ -50,28 +50,55 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         $precoPrato = (float) $_POST['precoPrato'];
         $ingredientesPrato = $_POST['ingredientesPrato'];
 
-        $uploadDir = 'upload/pratos';
+        $uploadDir = 'upload/pratos/';
 
-        $imagem = $_FILES['imagemPrato'];
-        $nomeImagem = $imagem['name'];
-        $tipoImagem = $imagem['type'];
-        $tamanhoImagem = $imagem['size'];
+        $foto = $_FILES['foto'];
+        $nomeFoto = $foto['name'];
+        $tipoFoto = $foto['type'];
+        $tamanhoFoto = $foto['size'];
 
-        $info = new SPLFileInfo($nomeImagem);
-        $extensao = $info->getExtension();
-        $novoNomeImagem = substr($nomePrato, 1, 4) . "." . $extensao;
+        $info = new SplFileInfo($nomeFoto);
+        $extensaoArq = $info->getExtension();
+        $novoNomeFoto = substr($nomeFoto, 1, 4) . "." . $extensaoArq;
 
         if ((trim($nomePrato) == "")) {
             echo "O nome do prato deve ser informado.";
         } else if ((trim($precoPrato) == "")) {
             echo "O preço do prato deve ser informado.";
-        } else if (($nomeImagem != "") && (!preg_match('/^image\/(jpeg|png|gif)$/', $tipoImagem))) { //validção tipo arquivo
+        } else if (($nomeFoto != "") && (!preg_match('/^image\/(jpeg|png|gif)$/', $tipoFoto))) { //validção tipo arquivo
             echo "<span id='error'>Isso não é uma imagem válida</span>";
 
-        } else if (($nomeImagem != "") && ($tamanhoImagem > TAMANHO_MAXIMO)) { //validação tamanho arquivo
+        } else if (($nomeFoto != "") && ($tamanhoFoto > TAMANHO_MAXIMO)) { //validação tamanho arquivo
             echo "<span id='error'>A imagem deve possuir no máximo 2 MB</span>";
+
         } else {
-            if (move_uploaded_file($imagem['tmp_name'], $uploadDir . '/' . $novoNomeImagem)) {
+            $stmt = $pdo->prepare("SELECT * FROM pratosPHP WHERE nomePrato = :nomePrato");
+            $stmt->bindParam(':nomePrato', $nomePrato);
+            $stmt->execute();
+
+            $rows = $stmt->rowCount();
+
+            if ($rows <= 0) {
+                if (($nomeFoto != "") && (move_uploaded_file($_FILES['foto']['tmp_name'], $uploadDir . $novoNomeFoto))) {
+                    $uploadfile = $uploadDir . $novoNomeFoto; // caminho/nome da imagem
+                } else {
+                    $uploadfile = null;
+                    echo "Sem upload de imagem.";
+                }
+
+                $stmt = $pdo->prepare("INSERT INTO pratosPHP (nomePrato, precoPrato, ingredientesPrato, imagemPrato) VALUES (:nome, :preco, :ingredientes, :imagem)");
+                $stmt->bindParam(':nome', $nomePrato);
+                $stmt->bindParam(':preco', $precoPrato);
+                $stmt->bindParam(':ingredientes', $ingredientesPrato);
+                $stmt->bindParam(':imagem', $uploadfile);
+                $stmt->execute();
+                echo "<span id='sucess'>Prato cadastrado!</span>";
+                } else {
+                    echo "<span id='error'>prato já existente.</span>";
+                }
+            }           
+            /*
+             if (move_uploaded_file($imagem['tmp_name'], $uploadDir . '/' . $novoNomeImagem)) {
                 $sql = "INSERT INTO pratosPHP (nomePrato, precoPrato, ingredientesPrato, imagemPrato) VALUES (:nome, :preco, :ingredientes, :imagem)";
 
                 $stmt = $pdo->prepare($sql);
@@ -88,28 +115,30 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
                 if ($rows <= 0) {
                     if ((move_uploaded_file($_FILES['foto']['tmp_name'], $uploadDir . $novoNomeImagem))) {
                         $uploadFile = $uploadDir . $novoNomeImagem;
+                        echo $uploadFile;
                     } else {
                         echo "Falha no upload da imagem.";
                         $uploadFile = null;
                     }
 
-                    $stmt = $pdo -> prepare("INSERT INTO pratosPHP (nomePrato, precoPrato, ingredientesPrato, imagemPrato) VALUES (:nome, :preco, :ingredientes, :imagem)");
-                    $stmt -> bindParam(':nome', $nomePrato);
-                    $stmt -> bindParam(':preco', $precoPrato);
-                    $stmt -> bindParam(':ingredientes', $ingredientesPrato);
-                    $stmt -> bindParam(':imagem', $uploadFile);
-                    $stmt -> execute();
+                    $stmt = $pdo->prepare("INSERT INTO pratosPHP (nomePrato, precoPrato, ingredientesPrato, imagemPrato) VALUES (:nome, :preco, :ingredientes, :imagem)");
+                    $stmt->bindParam(':nome', $nomePrato);
+                    $stmt->bindParam(':preco', $precoPrato);
+                    $stmt->bindParam(':ingredientes', $ingredientesPrato);
+                    $stmt->bindParam(':imagem', $uploadFile);
+                    $stmt->execute();
 
                     echo "Prato cadastrado com sucesso.";
                 } else {
+                    echo $uploadFile;
                     echo "Falha no cadastro do prato.";
                 }
             }
 
-    
+
         }
 
-
+*/       
     } catch (PDOException $ex) {
         echo "Erro: " . $ex->getMessage();
     }
