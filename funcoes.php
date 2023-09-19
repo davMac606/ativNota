@@ -160,16 +160,26 @@ function removePrato($codigoPrato) {
         if ($foto != null) {
             unlink($foto);
         }
-    echo $stmt->rowCount() . " prato(s) removido(s) com sucesso!";
+    echo "prato removido com sucesso!";
 }
 
-function alterDish() {
+function alterDish($codigoPrato) {
+    try {
     $pdo = conectaBD();
+    $stmt = $pdo->prepare('UPDATE pratosPHP SET nomePrato = :nomePrato, precoPrato = :preco, ingredientesPrato = :ingredientes, fotoPrato = :foto
+     WHERE codigoPrato = :codigoPrato');
+    $stmt->bindParam(':novoNome', $nomePrato);
+    $stmt->bindParam(':novoPreco', $precoPrato);
+    $stmt->bindParam(':novosIngredientes', $ingredientesPrato);
+    $stmt->bindParam(':novoFoto', $fotoPrato);
+    $stmt->bindParam(':codigo', $codigoPrato);
+    $stmt->execute();
+
+    echo "Prato alterado com sucesso!";
+} catch (PDOException $e) {
+    echo 'Error: '. $e->getMessage();
 }
-
-        
-
-
+}
 
 
 ?>

@@ -16,10 +16,8 @@
 </html>
 
 <?php
-if($_SERVER["REQUEST_METHOD"] === "POST") {
-
-
 include("funcoes.php");
+if($_SERVER["REQUEST_METHOD"] === "POST") {
 if (!isset($_POST["codigoPrato"])) {
     echo "Selecione um prato a ser excluído.";
 } else {
