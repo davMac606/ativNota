@@ -171,15 +171,15 @@ function prepAlter($codigoPrato) {
     $stmt->execute();
     return $stmt;
 }
-function alterDish($codigoPrato) {
+function alterDish($codigoPrato, $novoNome, $novoPreco, $novosIngredientes, $novaFoto) {
     try {
     $pdo = conectaBD();
-    $stmt = $pdo->prepare('UPDATE pratosPHP SET nomePrato = :nomePrato, precoPrato = :preco, ingredientesPrato = :ingredientes, fotoPrato = :foto
-     WHERE codigoPrato = :codigoPrato');
-    $stmt->bindParam(':novoNome', $nomePrato);
-    $stmt->bindParam(':novoPreco', $precoPrato);
-    $stmt->bindParam(':novosIngredientes', $ingredientesPrato);
-    $stmt->bindParam(':novaFoto', $fotoPrato);
+    $stmt = $pdo->prepare('UPDATE pratosPHP SET nomePrato = :novoNome, precoPrato = :novoPreco, ingredientesPrato = :novosIngredientes, fotoPrato = :novaFoto
+     WHERE codigoPrato = :codigo');
+    $stmt->bindParam(':novoNome', $novoNome);
+    $stmt->bindParam(':novoPreco', $novoPreco);
+    $stmt->bindParam(':novosIngredientes', $novosIngredientes);
+    $stmt->bindParam(':novaFoto', $novaFoto);
     $stmt->bindParam(':codigo', $codigoPrato);
     $stmt->execute();
 

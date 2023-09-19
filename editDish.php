@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         try {
 
             $stmt = prepAlter($codigoPrato);
-
+            while ($row = $stmt->fetch()) {
             echo "<form method='post' action='alter.php' enctype='multipart/form-data'>\n
             <label for='nomePrato'>Nome do prato: </label>\n
             <input type='text' name='nomePrato' value='$row[nomePrato]' required> *\n
@@ -42,11 +42,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         
         
             </form>";
+            }
         } catch (\PDOException $e) {
 
             echo $e->getMessage();
         }
     }
+
 }
 
 ?>
