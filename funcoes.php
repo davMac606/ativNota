@@ -4,7 +4,9 @@ function conectaBD() {
 
         global $host, $database, $username, $password;
 
-        $db = "mysql:host=$host;dbname=$database;charset=utf8";
+        $db = "mysql:host=143.106.241.3;dbname=cl201238;charset=utf8";
+        $username = "cl201238";
+        $password = "cl*14032006";
         $pdo = new PDO($db, $username, $password);
     
         // ativar o depurador de erros para gerar exceptions em caso de erros
@@ -97,8 +99,8 @@ function consultaParam($nomePrato) {
     
             echo "</table><br>
             
-            <button type='submit' formaction='remove.php'>Excluir Prato</button>
-            <button type='submit' formaction='edicao.php'>Alterar Prato</button>
+            <button type='submit' formaction='removeDish.php'>Excluir Prato</button>
+            <button type='submit' formaction='editDish.php'>Alterar Prato</button>
             
             </form>";
     
@@ -137,7 +139,7 @@ function consulta() {
             echo "</table><br>
             
             <button type='submit' formaction='removeDish.php'>Excluir Prato</button>
-            <button type='submit' formaction='alterDish.php'>Alterar Prato</button>
+            <button type='submit' formaction='editDish.php'>Alterar Prato</button>
             
             </form>";
     
@@ -162,7 +164,13 @@ function removePrato($codigoPrato) {
         }
     echo "prato removido com sucesso!";
 }
-
+function prepAlter($codigoPrato) {
+    $pdo = conectaBD();
+    $stmt = $pdo->prepare('SELECT * FROM pratosPHP WHERE codigoPrato');
+    $stmt->bindParam(':codigoPrato', $codigoPrato);
+    $stmt->execute();
+    return $stmt;
+}
 function alterDish($codigoPrato) {
     try {
     $pdo = conectaBD();
@@ -171,7 +179,7 @@ function alterDish($codigoPrato) {
     $stmt->bindParam(':novoNome', $nomePrato);
     $stmt->bindParam(':novoPreco', $precoPrato);
     $stmt->bindParam(':novosIngredientes', $ingredientesPrato);
-    $stmt->bindParam(':novoFoto', $fotoPrato);
+    $stmt->bindParam(':novaFoto', $fotoPrato);
     $stmt->bindParam(':codigo', $codigoPrato);
     $stmt->execute();
 
