@@ -163,6 +163,10 @@ function removePrato($codigoPrato) {
     echo $stmt->rowCount() . " prato(s) removido(s) com sucesso!";
 }
 
+function alterDish() {
+    $pdo = conectaBD();
+}
+
         
 
 
