@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Pratos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
 </head>
 
 <body>
@@ -19,7 +20,7 @@
 
     <form method='post' enctype="multipart/form-data">
         <label for="codigo">Código do prato:</label>
-        <input type"text" name="codigoPrato" id="codigoPrato" required>
+        <input type="text" name="codigoPrato" id="codigoPrato" required>
         <br><br>
 
         <label for="nome">Nome do prato:</label>
@@ -47,14 +48,14 @@
 define('TAMANHO_MAXIMO', (2 * 1024 * 1024));
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-    include ("funcoes.php");
+    include("funcoes.php");
     try {
         $codigoPrato = $_POST['codigoPrato'];
         $nomePrato = $_POST['nomePrato'];
         $precoPrato = (float) $_POST['precoPrato'];
         $ingredientesPrato = $_POST['ingredientesPrato'];
         $foto = $_FILES['foto'];
-    cadastra($codigoPrato, $nomePrato, $precoPrato, $ingredientesPrato, $foto);
+        cadastra($codigoPrato, $nomePrato, $precoPrato, $ingredientesPrato, $foto);
     } catch (PDOException $ex) {
         echo "Erro: " . $ex->getMessage();
     }

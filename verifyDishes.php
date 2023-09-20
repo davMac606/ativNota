@@ -1,39 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Consulta de Pratos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
 </head>
 
 <body>
 
-<a href="index.html">Home</a>
-<hr>
+    <a href="index.html">Home</a>
+    <hr>
 
-<h2>Consulta de pratos</h2>
-<div>
-    <form method="post">
+    <h2>Consulta de pratos</h2>
+    <div>
+        <form method="post">
 
-        Nome do prato:<br>
-        <input type="text" size="10" name="nomePrato">
-        <input type="submit" value="Consultar">
-        <hr>
-    </form>
-</div>
+            Código do prato:<br>
+            <input type="text" size="10" name="codigoPrato">
+            <input type="submit" value="Consultar">
+            <hr>
+        </form>
+    </div>
 
 </body>
+
 </html>
 
 <?php
-include("funcoes.php");
+require("funcoes.php");
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $nomePrato = $_POST["nomePrato"];
-    if (isset($_POST["nomePrato"]) && ($_POST["nomePrato"] !== "")) {
-        consultaParam($nomePrato);
+    $codigoPrato = $_POST["codigoPrato"];
+    if (isset($_POST["codigoPrato"]) && ($_POST["codigoPrato"] !== "")) {
+        consultaParam($codigoPrato);
     } else {
         consulta();
     }
+
 
 }
 ?>
